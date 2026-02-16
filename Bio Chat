@@ -1,0 +1,125 @@
+--[[
+    AJ BIO CHAT UI 🚀
+    Instagram - @4jayyz
+    Roblox - @Edward_Ajay
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local RE = ReplicatedStorage:WaitForChild("RE")
+local nameTextRemote = RE:WaitForChild("1RPNam1eTex1t")
+local nameColorRemote = RE:WaitForChild("1RPNam1eColo1r")
+
+--// GUI Creation
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local Title = Instance.new("TextLabel")
+local BioInput = Instance.new("TextBox")
+local RainbowToggle = Instance.new("TextButton")
+local DestroyBtn = Instance.new("TextButton")
+
+ScreenGui.Name = "AJ_BioChat_Hub"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+--// Main Frame
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Position = UDim2.new(0.5, -75, 0.5, -67)
+MainFrame.Size = UDim2.new(0, 150, 0, 135)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = MainFrame
+
+UIStroke.Thickness = 2
+UIStroke.Parent = MainFrame
+
+-- Rainbow Animation
+task.spawn(function()
+    while RunService.RenderStepped:Wait() do
+        local hue = tick() % 5 / 5
+        UIStroke.Color = Color3.fromHSV(hue, 1, 1)
+    end
+end)
+
+-- Title
+Title.Parent = MainFrame
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "Instagram: 4jayyz"
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 13
+
+-- (1) Bio TextBox
+BioInput.Parent = MainFrame
+BioInput.PlaceholderText = "Write Something...."
+BioInput.Text = ""
+BioInput.Size = UDim2.new(0.9, 0, 0, 30)
+BioInput.Position = UDim2.new(0.05, 0, 0.22, 0)
+BioInput.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+BioInput.TextColor3 = Color3.new(1, 1, 1)
+BioInput.Font = Enum.Font.Gotham
+BioInput.TextSize = 12
+Instance.new("UICorner", BioInput)
+
+BioInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed and BioInput.Text ~= "" then
+        pcall(function()
+            nameTextRemote:FireServer("RolePlayBio", BioInput.Text)
+        end)
+    end
+end)
+
+-- (2) Rainbow Chat
+local rainbowEnabled = false
+RainbowToggle.Parent = MainFrame
+RainbowToggle.Text = "Rainbow Chat: OFF"
+RainbowToggle.Size = UDim2.new(0.9, 0, 0, 25)
+RainbowToggle.Position = UDim2.new(0.05, 0, 0.52, 0)
+RainbowToggle.BackgroundColor3 = Color3.fromRGB(150, 0, 150)
+RainbowToggle.TextColor3 = Color3.new(1, 1, 1)
+RainbowToggle.Font = Enum.Font.GothamBold
+RainbowToggle.TextSize = 11
+Instance.new("UICorner", RainbowToggle)
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if rainbowEnabled then
+            local hue = tick() % 3 / 3
+            local color = Color3.fromHSV(hue, 1, 1)
+            pcall(function()
+                nameColorRemote:FireServer("PickingRPBioColor", color)
+            end)
+        end
+    end
+end)
+
+RainbowToggle.MouseButton1Click:Connect(function()
+    rainbowEnabled = not rainbowEnabled
+    RainbowToggle.Text = "Rainbow Chat: " .. (rainbowEnabled and "ON" or "OFF")
+    RainbowToggle.BackgroundColor3 = rainbowEnabled and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(150, 0, 150)
+end)
+
+-- (3) Destroy UI
+DestroyBtn.Parent = MainFrame
+DestroyBtn.Text = "Destroy UI"
+DestroyBtn.Size = UDim2.new(0.9, 0, 0, 25)
+DestroyBtn.Position = UDim2.new(0.05, 0, 0.76, 0)
+DestroyBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+DestroyBtn.TextColor3 = Color3.new(1, 1, 1)
+DestroyBtn.Font = Enum.Font.GothamBold
+DestroyBtn.TextSize = 11
+Instance.new("UICorner", DestroyBtn)
+
+DestroyBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
