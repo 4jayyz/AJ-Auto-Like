@@ -1,0 +1,114 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+--[[
+    CATALOG LIKE ALL UI (Universal)
+    Theme: Dark Rainbow
+    Features: Auto Like All Players, Toggle System, Destroy Button
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+--// GUI Creation
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local Title = Instance.new("TextLabel")
+local ToggleBtn = Instance.new("TextButton")
+local DestroyBtn = Instance.new("TextButton")
+
+ScreenGui.Name = "AJ_Catalog_Like"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Main Frame (Center and Small)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.Position = UDim2.new(0.5, -75, 0.5, -50)
+MainFrame.Size = UDim2.new(0, 150, 0, 120)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = MainFrame
+
+UIStroke.Thickness = 2
+UIStroke.Parent = MainFrame
+
+-- Rainbow Animation
+task.spawn(function()
+    while task.wait() do
+        local hue = tick() % 5 / 5
+        UIStroke.Color = Color3.fromHSV(hue, 1, 1)
+    end
+end)
+
+-- Title
+Title.Parent = MainFrame
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "AJ LIKE HUB"
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 14
+
+-- Toggle Button (ON/OFF)
+ToggleBtn.Name = "ToggleBtn"
+ToggleBtn.Parent = MainFrame
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ToggleBtn.Position = UDim2.new(0.1, 0, 0.35, 0)
+ToggleBtn.Size = UDim2.new(0.8, 0, 0.25, 0)
+ToggleBtn.Text = "Like All: OFF"
+ToggleBtn.TextColor3 = Color3.new(1, 1, 1)
+ToggleBtn.Font = Enum.Font.Gotham
+ToggleBtn.TextSize = 12
+Instance.new("UICorner", ToggleBtn)
+
+-- Destroy Button
+DestroyBtn.Name = "DestroyBtn"
+DestroyBtn.Parent = MainFrame
+DestroyBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+DestroyBtn.Position = UDim2.new(0.1, 0, 0.7, 0)
+DestroyBtn.Size = UDim2.new(0.8, 0, 0.2, 0)
+DestroyBtn.Text = "Destroy UI"
+DestroyBtn.TextColor3 = Color3.new(1, 1, 1)
+DestroyBtn.Font = Enum.Font.GothamBold
+DestroyBtn.TextSize = 10
+Instance.new("UICorner", DestroyBtn)
+
+--// Logic
+local isToggled = false
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    isToggled = not isToggled
+    
+    if isToggled then
+        ToggleBtn.Text = "Like All: ON"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+        
+        -- Sabhi Players ko ek baar Like bhejne ka logic
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= Players.LocalPlayer then
+                local success, err = pcall(function()
+                    local args = { [1] = player }
+                    ReplicatedStorage.Events.LikeOutfit:FireServer(unpack(args))
+                end)
+                task.wait(0.1) -- Server rate limit se bachne ke liye
+            end
+        end
+        
+        -- Kaam khatam hone par wapas off dikhana
+        task.wait(1)
+        isToggled = false
+        ToggleBtn.Text = "Like All: OFF"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    end
+end)
+
+DestroyBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
