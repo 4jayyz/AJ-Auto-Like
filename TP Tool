@@ -179,30 +179,3 @@ Instance.new("UICorner", DestroyBtn)
 DestroyBtn.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
-  SaveWaypoints(Waypoints)
-        AddWaypointUI(data)
-        NameBox.Text = ""
-    end
-end)
-
--- Destroy Button
-DestroyBtn.Parent = MainFrame
-DestroyBtn.Text = "Destroy UI"
-DestroyBtn.Size = UDim2.new(0.9, 0, 0, 25)
-DestroyBtn.Position = UDim2.new(0.05, 0, 0.85, 0)
-DestroyBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-DestroyBtn.TextColor3 = Color3.new(1, 1, 1)
-DestroyBtn.Font = Enum.Font.GothamBold
-DestroyBtn.TextSize = 11
-Instance.new("UICorner", DestroyBtn)
-
-DestroyBtn.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy()
-end)
-
--- Load saved waypoints for current game
-for _, wp in pairs(Waypoints) do
-    if wp.GAME == CurrentGame then
-        AddWaypointUI(wp)
-    end
-end
