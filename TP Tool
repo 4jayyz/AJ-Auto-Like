@@ -1,32 +1,14 @@
 --[[
-    4JAYYZ TP HUB 🚀 (Waypoints System)
+    4JAYYZ TP HUB 🚀 (Session Only)
     Instagram: @4jayyz
-    Roblox profile: @Edward_ajay
+    Roblox Profile: @Edward_Ajay
 ]]
 
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 
 local LocalPlayer = Players.LocalPlayer
-local DATA_FILE = "4Jayyz_Waypoints.json"
-
---// Save/Load Logic
-local function LoadWaypoints()
-    if isfile and isfile(DATA_FILE) then
-        local success, data = pcall(function() return HttpService:JSONDecode(readfile(DATA_FILE)) end)
-        if success then return data end
-    end
-    return {}
-end
-
-local function SaveWaypoints(data)
-    if writefile then writefile(DATA_FILE, HttpService:JSONEncode(data)) end
-end
-
-local Waypoints = LoadWaypoints()
-local CurrentGame = game.PlaceId
+local Waypoints = {} -- Ab ye sirf table mein rahega, file mein save nahi hoga
 
 --// UI Creation
 local ScreenGui = Instance.new("ScreenGui")
@@ -34,6 +16,169 @@ local MainFrame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
 local UIStroke = Instance.new("UIStroke")
 local Title = Instance.new("TextLabel")
+local NameBox = Instance.new("TextBox")
+local SetBtn = Instance.new("TextButton")
+local List = Instance.new("ScrollingFrame")
+local DestroyBtn = Instance.new("TextButton")
+
+ScreenGui.Name = "4Jayyz_TP_Hub"
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Main Frame
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Position = UDim2.new(0.5, -90, 0.5, -110)
+MainFrame.Size = UDim2.new(0, 180, 0, 240)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = MainFrame
+
+UIStroke.Thickness = 2
+UIStroke.Parent = MainFrame
+
+-- Rainbow Animation
+task.spawn(function()
+    while RunService.RenderStepped:Wait() do
+        local hue = tick() % 5 / 5
+        UIStroke.Color = Color3.fromHSV(hue, 1, 1)
+    end
+end)
+
+-- Title
+Title.Parent = MainFrame
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "Instagram: 4jayyz"
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 13
+
+-- Input Box
+NameBox.Parent = MainFrame
+NameBox.PlaceholderText = "Name waypoint..."
+NameBox.Text = ""
+NameBox.Size = UDim2.new(0.9, 0, 0, 25)
+NameBox.Position = UDim2.new(0.05, 0, 0.15, 0)
+NameBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+NameBox.TextColor3 = Color3.new(1, 1, 1)
+NameBox.Font = Enum.Font.Gotham
+NameBox.TextSize = 11
+Instance.new("UICorner", NameBox)
+
+-- SET Button
+SetBtn.Parent = MainFrame
+SetBtn.Text = "SET POSITION"
+SetBtn.Size = UDim2.new(0.9, 0, 0, 25)
+SetBtn.Position = UDim2.new(0.05, 0, 0.28, 0)
+SetBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+SetBtn.TextColor3 = Color3.new(1, 1, 1)
+SetBtn.Font = Enum.Font.GothamBold
+SetBtn.TextSize = 11
+Instance.new("UICorner", SetBtn)
+
+-- Waypoint List (Scrollable)
+List.Parent = MainFrame
+List.Size = UDim2.new(0.9, 0, 0, 95)
+List.Position = UDim2.new(0.05, 0, 0.42, 0)
+List.BackgroundTransparency = 1
+List.ScrollBarThickness = 2
+List.CanvasSize = UDim2.new(0, 0, 0, 0)
+
+local Layout = Instance.new("UIListLayout", List)
+Layout.Padding = UDim.new(0, 5)
+
+-- Add Waypoint Function
+local function AddWaypointUI(data)
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(1, -5, 0, 30)
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Frame.Parent = List
+    Instance.new("UICorner", Frame)
+
+    local Label = Instance.new("TextLabel")
+    Label.Size = UDim2.new(0.5, 0, 1, 0)
+    Label.Position = UDim2.new(0, 5, 0, 0)
+    Label.Text = data.NAME
+    Label.TextColor3 = Color3.new(1, 1, 1)
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.BackgroundTransparency = 1
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 10
+    Label.Parent = Frame
+
+    -- TP Button
+    local TP = Instance.new("TextButton")
+    TP.Size = UDim2.new(0, 25, 0, 20)
+    TP.Position = UDim2.new(0.55, 0, 0.15, 0)
+    TP.Text = "TP"
+    TP.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    TP.TextColor3 = Color3.new(1, 1, 1)
+    TP.Parent = Frame
+    Instance.new("UICorner", TP)
+
+    -- Copy Button
+    local Copy = Instance.new("TextButton")
+    Copy.Size = UDim2.new(0, 35, 0, 20)
+    Copy.Position = UDim2.new(0.75, 0, 0.15, 0)
+    Copy.Text = "COPY"
+    Copy.TextSize = 8
+    Copy.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    Copy.TextColor3 = Color3.new(1, 1, 1)
+    Copy.Parent = Frame
+    Instance.new("UICorner", Copy)
+
+    TP.MouseButton1Click:Connect(function()
+        local char = LocalPlayer.Character
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if root then
+            root.CFrame = CFrame.new(data.COORD[1], data.COORD[2], data.COORD[3])
+        end
+    end)
+
+    Copy.MouseButton1Click:Connect(function()
+        local coords = string.format("%.1f, %.1f, %.1f", data.COORD[1], data.COORD[2], data.COORD[3])
+        setclipboard(coords)
+        Copy.Text = "DONE"
+        task.wait(1)
+        Copy.Text = "COPY"
+    end)
+
+    List.CanvasSize = UDim2.new(0, 0, 0, Layout.AbsoluteContentSize.Y)
+end
+
+-- Set Button Logic
+SetBtn.MouseButton1Click:Connect(function()
+    local char = LocalPlayer.Character
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if root and NameBox.Text ~= "" then
+        local data = {
+            NAME = NameBox.Text,
+            COORD = {math.floor(root.Position.X), math.floor(root.Position.Y), math.floor(root.Position.Z)}
+        }
+        table.insert(Waypoints, data)
+        AddWaypointUI(data)
+        NameBox.Text = ""
+    end
+end)
+
+-- Destroy Button
+DestroyBtn.Parent = MainFrame
+DestroyBtn.Text = "Destroy UI"
+DestroyBtn.Size = UDim2.new(0.9, 0, 0, 25)
+DestroyBtn.Position = UDim2.new(0.05, 0, 0.85, 0)
+DestroyBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+DestroyBtn.TextColor3 = Color3.new(1, 1, 1)
+DestroyBtn.Font = Enum.Font.GothamBold
+DestroyBtn.TextSize = 11
+Instance.new("UICorner", DestroyBtn)
+
+DestroyBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
 local NameBox = Instance.new("TextBox")
 local SetBtn = Instance.new("TextButton")
 local List = Instance.new("ScrollingFrame")
