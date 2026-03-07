@@ -1,17 +1,146 @@
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
---[[
-    CATALOG LIKE ALL UI (Universal)
-    Theme: Dark Rainbow
-    Features: Auto Like All Players, Toggle System, Destroy Button
-]]
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local ProblemText = Instance.new("TextLabel")
+local ExitBtn = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
 
+local DevTitle = Instance.new("TextLabel")
+local DevFrame = Instance.new("Frame")
+local DevIcon = Instance.new("ImageLabel")
+local DevName = Instance.new("TextLabel")
+local DevUser = Instance.new("TextLabel")
+local DevInsta = Instance.new("TextLabel")
+local IconCorner = Instance.new("UICorner")
+
+local TARGET_USERNAME = "Edward_Ajay" 
+local DISPLAY_NAME = "Ajay"
+local INSTA_ID = "Instagram: @4jayyz"
+
+ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.Name = "AJ_Maintenance"
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -140)
+MainFrame.Size = UDim2.new(0, 300, 0, 280)
+MainFrame.Active = true
+MainFrame.Draggable = true 
+
+UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.Parent = MainFrame
+
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 45)
+Title.Text = "‼️ NEW UPDATE ‼️"
+Title.TextColor3 = Color3.fromRGB(255, 50, 50)
+Title.TextSize = 22
+Title.Font = Enum.Font.GothamBold
+Title.BackgroundTransparency = 1
+
+ProblemText.Parent = MainFrame
+ProblemText.Position = UDim2.new(0, 15, 0, 50)
+ProblemText.Size = UDim2.new(0, 270, 0, 40)
+ProblemText.Text = "Mat kar khud par itana guroor ayye dill,\n Maine tere liye tujhse behatareen chehre thukraye hai"
+ProblemText.TextColor3 = Color3.fromRGB(220, 220, 220)
+ProblemText.TextWrapped = true
+ProblemText.TextSize = 14
+ProblemText.Font = Enum.Font.GothamMedium
+ProblemText.BackgroundTransparency = 1
+
+DevTitle.Parent = MainFrame
+DevTitle.Position = UDim2.new(0, 15, 0, 95)
+DevTitle.Size = UDim2.new(0, 270, 0, 20)
+DevTitle.Text = "Developer 👑"
+DevTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
+DevTitle.TextSize = 16
+DevTitle.Font = Enum.Font.GothamBold
+DevTitle.TextXAlignment = Enum.TextXAlignment.Left
+DevTitle.BackgroundTransparency = 1
+
+DevFrame.Name = "DevFrame"
+DevFrame.Parent = MainFrame
+DevFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+DevFrame.Position = UDim2.new(0, 15, 0, 120)
+DevFrame.Size = UDim2.new(0, 270, 0, 85)
+
+local devCorner = Instance.new("UICorner")
+devCorner.CornerRadius = UDim.new(0, 10)
+devCorner.Parent = DevFrame
+
+local Success, TargetUserId = pcall(function()
+    return game.Players:GetUserIdFromNameAsync(TARGET_USERNAME)
+end)
+
+if Success then
+    local content, isReady = game.Players:GetUserThumbnailAsync(TargetUserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
+    DevIcon.Image = content
+else
+    DevIcon.Image = "rbxassetid://0" 
+end
+
+DevIcon.Parent = DevFrame
+DevIcon.Size = UDim2.new(0, 60, 0, 60)
+DevIcon.Position = UDim2.new(0, 10, 0, 12)
+DevIcon.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+IconCorner.CornerRadius = UDim.new(1, 0)
+IconCorner.Parent = DevIcon
+
+DevName.Parent = DevFrame
+DevName.Position = UDim2.new(0, 80, 0, 12)
+DevName.Size = UDim2.new(0, 180, 0, 20)
+DevName.Text = DISPLAY_NAME
+DevName.TextColor3 = Color3.fromRGB(255, 255, 255)
+DevName.TextSize = 17
+DevName.Font = Enum.Font.GothamBold
+DevName.TextXAlignment = Enum.TextXAlignment.Left
+DevName.BackgroundTransparency = 1
+
+DevUser.Parent = DevFrame
+DevUser.Position = UDim2.new(0, 80, 0, 32)
+DevUser.Size = UDim2.new(0, 180, 0, 20)
+DevUser.Text = "@" .. TARGET_USERNAME
+DevUser.TextColor3 = Color3.fromRGB(180, 180, 180)
+DevUser.TextSize = 13
+DevUser.Font = Enum.Font.Gotham
+DevUser.TextXAlignment = Enum.TextXAlignment.Left
+DevUser.BackgroundTransparency = 1
+
+DevInsta.Parent = DevFrame
+DevInsta.Position = UDim2.new(0, 80, 0, 52)
+DevInsta.Size = UDim2.new(0, 180, 0, 20)
+DevInsta.Text = INSTA_ID
+DevInsta.TextColor3 = Color3.fromRGB(255, 120, 210)
+DevInsta.TextSize = 13
+DevInsta.Font = Enum.Font.GothamMedium
+DevInsta.TextXAlignment = Enum.TextXAlignment.Left
+DevInsta.BackgroundTransparency = 1
+
+ExitBtn.Parent = MainFrame
+ExitBtn.Position = UDim2.new(0.5, -70, 0, 220)
+ExitBtn.Size = UDim2.new(0, 140, 0, 40)
+ExitBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+ExitBtn.Text = "Start"
+ExitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExitBtn.Font = Enum.Font.GothamBold
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.Parent = ExitBtn
+ExitBtn.MouseButton1Click:Wait() 
+local welcomeSound = Instance.new("Sound")
+    welcomeSound.Name = "WelcomeSound"
+    welcomeSound.SoundId = "rbxassetid://9083627113"
+    welcomeSound.Volume = 5
+    welcomeSound.Parent = game:GetService("SoundService")
+    welcomeSound:Play()
+    game:GetService("Debris"):AddItem(welcomeSound, 10)
+ScreenGui:Destroy()
+    
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
---// GUI Creation
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
@@ -24,7 +153,6 @@ ScreenGui.Name = "AJ_Catalog_Like"
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ResetOnSpawn = false
 
--- Main Frame (Center and Small)
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -39,7 +167,6 @@ UICorner.Parent = MainFrame
 UIStroke.Thickness = 2
 UIStroke.Parent = MainFrame
 
--- Rainbow Animation
 task.spawn(function()
     while task.wait() do
         local hue = tick() % 5 / 5
@@ -47,16 +174,14 @@ task.spawn(function()
     end
 end)
 
--- Title
 Title.Parent = MainFrame
 Title.BackgroundTransparency = 1
 Title.Size = UDim2.new(1, 0, 0, 30)
-Title.Text = "AJ LIKE HUB"
+Title.Text = "Instagram: 4jayyz"
 Title.TextColor3 = Color3.new(1, 1, 1)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 14
 
--- Toggle Button (ON/OFF)
 ToggleBtn.Name = "ToggleBtn"
 ToggleBtn.Parent = MainFrame
 ToggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -68,7 +193,6 @@ ToggleBtn.Font = Enum.Font.Gotham
 ToggleBtn.TextSize = 12
 Instance.new("UICorner", ToggleBtn)
 
--- Destroy Button
 DestroyBtn.Name = "DestroyBtn"
 DestroyBtn.Parent = MainFrame
 DestroyBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
@@ -80,28 +204,39 @@ DestroyBtn.Font = Enum.Font.GothamBold
 DestroyBtn.TextSize = 10
 Instance.new("UICorner", DestroyBtn)
 
---// Logic
 local isToggled = false
 
 ToggleBtn.MouseButton1Click:Connect(function()
+    local welcomeSound = Instance.new("Sound")
+    welcomeSound.Name = "WelcomeSound"
+    welcomeSound.SoundId = "rbxassetid://9083627113"
+    welcomeSound.Volume = 10
+    welcomeSound.Parent = game:GetService("SoundService")
+    welcomeSound:Play()
+    game:GetService("Debris"):AddItem(welcomeSound, 10)
     isToggled = not isToggled
     
     if isToggled then
         ToggleBtn.Text = "Like All: ON"
         ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
         
-        -- Sabhi Players ko ek baar Like bhejne ka logic
         for _, player in pairs(Players:GetPlayers()) do
             if player ~= Players.LocalPlayer then
                 local success, err = pcall(function()
                     local args = { [1] = player }
                     ReplicatedStorage.Events.LikeOutfit:FireServer(unpack(args))
+                    local welcomeSound = Instance.new("Sound")
+                    welcomeSound.Name = "WelcomeSound"
+                    welcomeSound.SoundId = "rbxassetid://7322736504"
+                    welcomeSound.Volume = 5
+                    welcomeSound.Parent = game:GetService("SoundService")
+                    welcomeSound:Play()
+                    game:GetService("Debris"):AddItem(welcomeSound, 10)
                 end)
-                task.wait(0.1) -- Server rate limit se bachne ke liye
+                task.wait(0.1)
             end
         end
         
-        -- Kaam khatam hone par wapas off dikhana
         task.wait(1)
         isToggled = false
         ToggleBtn.Text = "Like All: OFF"
@@ -110,5 +245,12 @@ ToggleBtn.MouseButton1Click:Connect(function()
 end)
 
 DestroyBtn.MouseButton1Click:Connect(function()
+    local welcomeSound = Instance.new("Sound")
+    welcomeSound.Name = "WelcomeSound"
+    welcomeSound.SoundId = "rbxassetid://9083627113"
+    welcomeSound.Volume = 10
+    welcomeSound.Parent = game:GetService("SoundService")
+    welcomeSound:Play()
+    game:GetService("Debris"):AddItem(welcomeSound, 10)
     ScreenGui:Destroy()
 end)
